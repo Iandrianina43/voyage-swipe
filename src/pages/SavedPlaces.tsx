@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { dummyPlaces, Place } from '@/data/places';
-import { Heart, Star, Hotel, Restaurant } from 'lucide-react';
+import { Heart, Star, Hotel, Utensils } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -75,7 +75,7 @@ const SavedPlaces = () => {
                       <div className="flex items-center text-sm space-x-1 mb-1">
                         {place.type === 'hotel' ? 
                           <Hotel size={14} className="text-muted-foreground" /> : 
-                          <Restaurant size={14} className="text-muted-foreground" />
+                          <Utensils size={14} className="text-muted-foreground" />
                         }
                         <span className="capitalize text-muted-foreground">{place.type}</span>
                         <span className="text-muted-foreground">•</span>

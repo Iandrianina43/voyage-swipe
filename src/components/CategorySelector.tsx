@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Hotel, Restaurant } from 'lucide-react';
+import { Hotel, Utensils } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface CategorySelectorProps {
@@ -39,7 +39,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         )}
         onClick={() => onCategoryChange('restaurant')}
       >
-        <Restaurant size={20} />
+        <Utensils size={20} />
         <span>Restaurants</span>
       </Button>
     </div>

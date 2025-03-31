@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, MapPin, Hotel, Restaurant, Star } from 'lucide-react';
+import { Search, MapPin, Hotel, Utensils, Star } from 'lucide-react';
 import { dummyPlaces, Place } from '@/data/places';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -103,7 +103,7 @@ const SearchPage = () => {
                         <div className="flex items-center bg-muted rounded-full p-1 px-2">
                           {place.type === 'hotel' ? 
                             <Hotel size={12} className="mr-1" /> : 
-                            <Restaurant size={12} className="mr-1" />
+                            <Utensils size={12} className="mr-1" />
                           }
                           <span className="text-xs capitalize">{place.type}</span>
                         </div>
@@ -154,7 +154,7 @@ const SearchPage = () => {
               className="flex justify-start space-x-2 h-auto py-3" 
               onClick={() => searchFor('Fine dining')}
             >
-              <Restaurant size={20} className="text-voyage-accent" />
+              <Utensils size={20} className="text-voyage-accent" />
               <div className="text-left">
                 <p className="font-medium">Fine Dining</p>
                 <p className="text-xs text-muted-foreground">Upscale experiences</p>

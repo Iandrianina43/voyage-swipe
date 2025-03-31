@@ -3,7 +3,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { dummyPlaces } from '@/data/places';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Star, Heart, MapPin, Hotel, Restaurant } from 'lucide-react';
+import { ArrowLeft, Star, Heart, MapPin, Hotel, Utensils } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Badge } from '@/components/ui/badge';
 
@@ -41,7 +41,7 @@ const PlaceDetails = () => {
     ));
   };
   
-  const TypeIcon = place.type === 'hotel' ? Hotel : Restaurant;
+  const TypeIcon = place.type === 'hotel' ? Hotel : Utensils;
   
   return (
     <div className="pb-16">
