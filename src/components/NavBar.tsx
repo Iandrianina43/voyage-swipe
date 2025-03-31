@@ -1,43 +1,54 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Search, MapPin, Heart } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Search, MapPin, Heart, Home, Calendar } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const NavBar = () => {
+  const location = useLocation();
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b">
-      <div className="container flex items-center justify-between h-16 px-4">
-        <Link to="/" className="flex items-center">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-voyage-primary to-voyage-accent bg-clip-text text-transparent">
-            Mi Voyage
-          </h1>
+    <>
+      {/* Top header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b">
+        <div className="container max-w-md mx-auto flex items-center justify-center h-14 px-4 relative">
+          <Link to="/" className="absolute left-4">
+            <h1 className="text-xl font-bold text-tripadvisor-primary">
+              Mi Voyage
+            </h1>
+          </Link>
+        </div>
+      </header>
+      
+      {/* Bottom navigation */}
+      <nav className="mobile-nav max-w-md mx-auto">
+        <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
+          <Home size={20} />
+          <span className="text-xs mt-1">Home</span>
         </Link>
         
-        <div className="flex items-center space-x-1">
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" asChild>
-            <Link to="/search">
-              <Search size={20} />
-              <span className="sr-only">Search</span>
-            </Link>
-          </Button>
-          
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" asChild>
-            <Link to="/explore">
-              <MapPin size={20} />
-              <span className="sr-only">Map</span>
-            </Link>
-          </Button>
-          
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" asChild>
-            <Link to="/saved">
-              <Heart size={20} />
-              <span className="sr-only">Saved</span>
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </header>
+        <Link to="/search" className={`nav-item ${isActive('/search') ? 'active' : ''}`}>
+          <Search size={20} />
+          <span className="text-xs mt-1">Search</span>
+        </Link>
+        
+        <Link to="/explore" className={`nav-item ${isActive('/explore') ? 'active' : ''}`}>
+          <MapPin size={20} />
+          <span className="text-xs mt-1">Explore</span>
+        </Link>
+        
+        <Link to="/saved" className={`nav-item ${isActive('/saved') ? 'active' : ''}`}>
+          <Heart size={20} />
+          <span className="text-xs mt-1">Saved</span>
+        </Link>
+        
+        <Link to="/trip-planner" className={`nav-item ${isActive('/trip-planner') ? 'active' : ''}`}>
+          <Calendar size={20} />
+          <span className="text-xs mt-1">Trips</span>
+        </Link>
+      </nav>
+    </>
   );
 };
 

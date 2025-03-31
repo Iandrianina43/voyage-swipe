@@ -5,65 +5,65 @@
 
 @layer base {
   :root {
-    --background: 204 100% 97%;
-    --foreground: 200 50% 20%;
+    --background: 150 60% 98%;
+    --foreground: 160 50% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 200 50% 20%;
+    --card-foreground: 160 50% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 200 50% 20%;
+    --popover-foreground: 160 50% 10%;
 
-    --primary: 199 91% 48%;
+    --primary: 153 100% 33%; /* TripAdvisor green */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 201 97% 40%;
+    --secondary: 155 75% 54%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 200 10% 92%;
-    --muted-foreground: 200 30% 45%;
+    --muted: 150 10% 92%;
+    --muted-foreground: 150 30% 35%;
 
-    --accent: 21 96% 53%;
+    --accent: 0 80% 68%; /* Red accent for hearts/likes */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 20% 88%;
-    --input: 200 20% 88%;
-    --ring: 199 91% 48%;
+    --border: 150 20% 88%;
+    --input: 150 20% 88%;
+    --ring: 153 100% 33%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 
   .dark {
-    --background: 201 80% 10%;
-    --foreground: 198 20% 95%;
+    --background: 160 60% 6%;
+    --foreground: 150 20% 95%;
 
-    --card: 201 70% 12%;
-    --card-foreground: 198 20% 95%;
+    --card: 160 50% 8%;
+    --card-foreground: 150 20% 95%;
 
-    --popover: 201 70% 12%;
-    --popover-foreground: 198 20% 95%;
+    --popover: 160 50% 8%;
+    --popover-foreground: 150 20% 95%;
 
-    --primary: 199 91% 48%;
+    --primary: 153 100% 33%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 201 97% 40%;
+    --secondary: 155 75% 30%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 201 50% 18%;
-    --muted-foreground: 200 20% 70%;
+    --muted: 160 50% 15%;
+    --muted-foreground: 150 20% 70%;
 
-    --accent: 21 96% 53%;
+    --accent: 0 80% 68%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 201 50% 18%;
-    --input: 201 50% 18%;
-    --ring: 199 91% 48%;
+    --border: 160 50% 15%;
+    --input: 160 50% 15%;
+    --ring: 153 100% 33%;
   }
 }
 
@@ -84,5 +84,47 @@
   
   .swipe-card.swiping {
     @apply transition-transform duration-300 ease-out;
+  }
+
+  /* Mobile app styling */
+  .mobile-container {
+    @apply max-w-md mx-auto min-h-screen relative pb-16 overflow-hidden;
+  }
+
+  .mobile-header {
+    @apply sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border px-4 py-3 flex items-center;
+  }
+
+  .mobile-page {
+    @apply pt-16 pb-20 min-h-screen;
+  }
+
+  .mobile-card {
+    @apply rounded-xl border shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-t border-border flex justify-around items-center p-2;
+  }
+
+  .nav-item {
+    @apply flex flex-col items-center justify-center py-1 px-3 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors;
+  }
+
+  .nav-item.active {
+    @apply text-primary;
+  }
+
+  /* Rating stars */
+  .stars-container {
+    @apply flex items-center;
+  }
+  
+  .star-filled {
+    @apply text-tripadvisor-yellow fill-tripadvisor-yellow;
+  }
+  
+  .star-empty {
+    @apply text-muted-foreground/30;
   }
 }

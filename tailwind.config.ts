@@ -63,12 +63,15 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				voyage: {
-					primary: '#0EA5E9',
-					secondary: '#0284C7',
-					accent: '#F97316',
-					light: '#E0F2FE',
-					dark: '#0C4A6E',
+				// TripAdvisor color palette
+				tripadvisor: {
+					primary: '#00AA6C', // TripAdvisor green
+					secondary: '#34E0A1',
+					accent: '#FF5D5D', // Red accent for likes/hearts
+					light: '#E0F7EF',
+					dark: '#004B3F',
+					yellow: '#FFD700', // Gold for stars/ratings
+					gray: '#767676'
 				}
 			},
 			borderRadius: {
@@ -112,6 +115,10 @@ export default {
 				'card-swipe-left': {
 					'0%': { transform: 'translateX(0) rotate(0)', opacity: '1' },
 					'100%': { transform: 'translateX(-150%) rotate(-20deg)', opacity: '0' }
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-5px)' }
 				}
 			},
 			animation: {
@@ -121,7 +128,8 @@ export default {
 				'slide-out-left': 'slide-out-left 0.3s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
 				'card-swipe-right': 'card-swipe-right 0.5s ease-out forwards',
-				'card-swipe-left': 'card-swipe-left 0.5s ease-out forwards'
+				'card-swipe-left': 'card-swipe-left 0.5s ease-out forwards',
+				'float': 'float 3s ease-in-out infinite'
 			}
 		}
 	},

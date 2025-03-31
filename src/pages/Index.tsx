@@ -16,12 +16,15 @@ const Index = () => {
   }, [activeCategory]);
   
   return (
-    <div className="min-h-screen bg-background pb-16">
-      <NavBar />
-      <div className="container px-4 py-20 pt-24">
-        <h1 className="text-3xl font-bold mb-2 text-center">Mi Voyage</h1>
-        <p className="text-center text-muted-foreground mb-6">
-          Discover amazing {activeCategory === 'hotel' ? 'hotels' : 'restaurants'} with a swipe
+    <div className="mobile-container bg-background">
+      <div className="mobile-header justify-center">
+        <h1 className="text-xl font-bold text-tripadvisor-primary">Mi Voyage</h1>
+      </div>
+      
+      <div className="px-4 py-4">
+        <h2 className="text-lg font-semibold mb-2 text-center">Discover & Explore</h2>
+        <p className="text-center text-muted-foreground text-sm mb-6">
+          Find amazing {activeCategory === 'hotel' ? 'hotels' : 'restaurants'} with a swipe
         </p>
         
         <CategorySelector 
@@ -31,6 +34,8 @@ const Index = () => {
         
         <SwipeContainer places={filteredPlaces} />
       </div>
+      
+      <NavBar />
     </div>
   );
 };
