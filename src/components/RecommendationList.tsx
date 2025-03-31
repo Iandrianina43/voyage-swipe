@@ -79,9 +79,9 @@ const RecommendationList: React.FC<RecommendationListProps> = ({
           ))}
           
           <div className="pt-2 flex justify-center">
-            <Link to="/trip-planner">
+            <Link to="/create-trip-path">
               <Button variant="outline" className="bg-voyage-primary text-white hover:bg-voyage-secondary">
-                Plan a trip with these places
+                Create a trip path with these places
               </Button>
             </Link>
           </div>
