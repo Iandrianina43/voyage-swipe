@@ -10,6 +10,7 @@ import PlaceDetails from "./pages/PlaceDetails";
 import SavedPlaces from "./pages/SavedPlaces";
 import SearchPage from "./pages/SearchPage";
 import ExplorePage from "./pages/ExplorePage";
+import TripPlanner from "./pages/TripPlanner";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/saved" element={<SavedPlaces />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/trip-planner" element={<TripPlanner />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
