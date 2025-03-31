@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
-import { ArrowLeft, CalendarIcon, MapPin, Plus, X, DragDropIcon, ArrowDown, ArrowUp } from 'lucide-react';
+import { ArrowLeft, CalendarIcon, MapPin, Plus, X, GripVertical, ArrowDown, ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { dummyPlaces, Place } from '@/data/places';
