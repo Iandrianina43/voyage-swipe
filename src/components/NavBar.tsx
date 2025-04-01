@@ -20,7 +20,7 @@ const NavBar = () => {
 
   // Desktop sidebar navigation
   const DesktopNav = () => (
-    <div className="hidden md:block fixed left-0 top-0 h-full w-64 bg-white border-r border-border p-6">
+    <div className="hidden md:block fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-border p-6">
       <Link to="/" className="flex items-center mb-8">
         <h1 className="text-2xl font-bold text-tripadvisor-primary">
           Mi Voyage
@@ -46,7 +46,7 @@ const NavBar = () => {
   const MobileNav = () => (
     <>
       {/* Top header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b shadow-sm">
         <div className="container max-w-md mx-auto flex items-center justify-center h-14 px-4 relative">
           <Link to="/" className="absolute left-4">
             <h1 className="text-xl font-bold text-tripadvisor-primary">
@@ -63,7 +63,7 @@ const NavBar = () => {
       </header>
       
       {/* Bottom navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t flex items-center justify-around p-2 max-w-md mx-auto">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-t shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex items-center justify-around p-2 max-w-md mx-auto">
         <NavItem to="/" icon={<Home size={20} />} label={t('home')} isActive={isActive('/')} />
         <NavItem to="/search" icon={<Search size={20} />} label={t('search')} isActive={isActive('/search')} />
         <NavItem to="/explore" icon={<MapPin size={20} />} label={t('explore')} isActive={isActive('/explore')} />
@@ -81,14 +81,14 @@ const NavBar = () => {
           <Globe size={20} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-white">
-        <DropdownMenuItem onClick={() => setLanguage('fr')} className={language === 'fr' ? 'bg-muted font-medium' : ''}>
+      <DropdownMenuContent align="end" className="bg-white shadow-lg border rounded-lg">
+        <DropdownMenuItem onClick={() => setLanguage('fr')} className={language === 'fr' ? 'bg-tripadvisor-light font-medium' : 'hover:bg-gray-100'}>
           {t('french')}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('en')} className={language === 'en' ? 'bg-muted font-medium' : ''}>
+        <DropdownMenuItem onClick={() => setLanguage('en')} className={language === 'en' ? 'bg-tripadvisor-light font-medium' : 'hover:bg-gray-100'}>
           {t('english')}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('mg')} className={language === 'mg' ? 'bg-muted font-medium' : ''}>
+        <DropdownMenuItem onClick={() => setLanguage('mg')} className={language === 'mg' ? 'bg-tripadvisor-light font-medium' : 'hover:bg-gray-100'}>
           {t('malagasy')}
         </DropdownMenuItem>
       </DropdownMenuContent>

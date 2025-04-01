@@ -72,12 +72,13 @@
 }
 
 .mobile-header {
-  @apply flex items-center px-4 py-3 border-b;
+  @apply flex items-center px-4 py-3 border-b bg-white/90 backdrop-blur-sm shadow-sm;
 }
 
-/* Animation classes for card swipe */
+/* Animation classes for card swipe - improved */
 .swipe-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  @apply bg-white rounded-xl overflow-hidden;
 }
 
 .swipe-card.swiping {
@@ -106,9 +107,9 @@
   }
 }
 
-/* Mobile bottom navigation */
+/* Mobile bottom navigation - refined */
 .mobile-nav {
-  @apply fixed bottom-0 left-0 right-0 z-40 bg-white border-t flex items-center justify-around p-2;
+  @apply fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-sm border-t flex items-center justify-around p-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)];
 }
 
 .nav-item {
@@ -129,7 +130,7 @@
 }
 
 .glass-card {
-  @apply bg-white/80 backdrop-blur-sm shadow-md;
+  @apply bg-white/80 backdrop-blur-sm shadow-md rounded-xl border border-white/20;
 }
 
 /* Media query for desktop */
@@ -143,7 +144,7 @@
   .swipe-card {
     max-width: 500px;
     margin: 0 auto;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    @apply shadow-lg hover:shadow-xl transition-shadow;
   }
   
   /* Desktop specific design improvements */
@@ -153,5 +154,20 @@
   
   .desktop-card {
     @apply rounded-xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl;
+  }
+  
+  /* Consistent button styling */
+  button.primary-button {
+    @apply bg-tripadvisor-primary text-white rounded-full px-4 py-2 hover:bg-tripadvisor-primary/90 transition-colors shadow-md hover:shadow-lg;
+  }
+  
+  /* Consistent Headings */
+  h1, h2, h3, h4, h5 {
+    @apply text-gray-800;
+  }
+  
+  /* Container consistency */
+  .content-container {
+    @apply bg-white rounded-xl shadow-md p-6;
   }
 }

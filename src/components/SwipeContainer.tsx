@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SwipeCard from './SwipeCard';
 import { Place } from '@/data/places';
 import { useToast } from '@/hooks/use-toast';
@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SwipeContainerProps {
   places: Place[];
@@ -20,6 +21,7 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
   const { toast } = useToast();
   const { user } = useAuth();
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   
   const currentPlace = places[currentIndex];
   const nextPlace = places[currentIndex + 1];
@@ -54,7 +56,7 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
   };
   
   return (
-    <div className="h-[420px] my-8 relative">
+    <div className={`my-8 relative ${isMobile ? 'h-[420px]' : 'h-[500px]'}`}>
       {currentIndex < places.length ? (
         <>
           {/* Current card */}
@@ -68,7 +70,7 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
           
           {/* Next card (for peeking) */}
           {nextPlace && (
-            <div className="absolute inset-0 scale-[0.98] -rotate-3 -z-10 opacity-70">
+            <div className={`absolute inset-0 ${isMobile ? 'scale-[0.98] -rotate-3' : 'scale-[0.97] -rotate-2'} -z-10 opacity-70`}>
               <SwipeCard
                 place={nextPlace}
                 onSwipe={() => {}}
@@ -79,7 +81,7 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
         </>
       ) : (
         <div className="h-full flex items-center justify-center">
-          <div className="text-center p-6 max-w-xs mx-auto">
+          <div className="text-center p-6 max-w-xs mx-auto bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
             <p className="text-lg font-medium mb-3 text-tripadvisor-primary">
               {t('no.more.places')}
             </p>

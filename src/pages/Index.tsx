@@ -11,6 +11,7 @@ import { LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState<'hotel' | 'restaurant'>('hotel');
@@ -18,6 +19,7 @@ const Index = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     // Filter places based on the active category
@@ -53,33 +55,30 @@ const Index = () => {
     }
   };
   
-  // Return different layouts based on screen size
-  const isDesktop = window.innerWidth >= 768;
-  
   return (
-    <div className={`bg-background ${isDesktop ? 'max-w-6xl mx-auto p-8' : 'mobile-container'}`}>
-      {isDesktop ? (
+    <div className={`bg-background ${isMobile ? 'mobile-container' : 'max-w-6xl mx-auto p-8'}`}>
+      {!isMobile ? (
         // Desktop layout
         <div className="grid grid-cols-12 gap-8">
           <div className="col-span-12 flex justify-between items-center mb-8">
             <h1 className="text-2xl font-bold text-tripadvisor-primary">{t('app.name')}</h1>
             
             {!user ? (
-              <Button asChild variant="outline">
+              <Button asChild variant="outline" className="shadow-sm hover:shadow-md transition-shadow">
                 <Link to="/auth" className="flex items-center gap-2">
                   <LogIn size={18} />
                   <span>{t('login')}</span>
                 </Link>
               </Button>
             ) : (
-              <Button asChild variant="ghost">
+              <Button asChild variant="ghost" className="hover:bg-tripadvisor-light">
                 <Link to="/profile">{t('profile')}</Link>
               </Button>
             )}
           </div>
           
           <div className="col-span-4">
-            <div className="sticky top-8">
+            <div className="sticky top-8 bg-white/50 backdrop-blur-sm p-6 rounded-xl shadow-sm">
               <h2 className="text-xl font-semibold mb-4">{t('discover')}</h2>
               <p className="text-muted-foreground mb-6">
                 {t('discover.subtitle')}
