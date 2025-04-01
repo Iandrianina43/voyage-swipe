@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Heart, X, Star } from 'lucide-react';
 import { Place } from '@/data/places';
 import { cn } from '@/lib/utils';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface SwipeCardProps {
   place: Place;
-  onSwipe: (direction: 'left' | 'right', id: string) => void;
+  onSwipe: (direction: 'left' | 'right') => void;
   isTop: boolean;
 }
 
@@ -21,7 +21,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
   
   const handleSwipe = (direction: 'left' | 'right') => {
     setSwipeAnimation(direction);
-    onSwipe(direction, place.id);
+    onSwipe(direction);
   };
 
   const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {

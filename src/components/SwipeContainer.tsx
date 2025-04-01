@@ -1,6 +1,5 @@
 
-import React, { useState, useRef } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
 import SwipeCard from './SwipeCard';
 import { Place } from '@/data/places';
 import { useToast } from '@/hooks/use-toast';
@@ -63,15 +62,19 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
           >
             <SwipeCard
               place={currentPlace}
-              onSwipeLeft={() => handleSwipe('left')}
-              onSwipeRight={() => handleSwipe('right')}
+              onSwipe={(direction) => handleSwipe(direction)}
+              isTop={true}
             />
           </div>
           
           {/* Next card (for peeking) */}
           {nextPlace && (
             <div className="absolute inset-0 scale-[0.98] -rotate-3 -z-10 opacity-70">
-              <SwipeCard place={nextPlace} isDisabled />
+              <SwipeCard
+                place={nextPlace}
+                onSwipe={() => {}}
+                isTop={false}
+              />
             </div>
           )}
         </>
@@ -82,7 +85,7 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
               No more places to show!
             </p>
             <p className="text-muted-foreground mb-4">
-              You've seen all {activeCategory === 'hotel' ? t('hotels') : t('restaurants')} in this category.
+              You've seen all {places.length > 0 && places[0].type === 'hotel' ? t('hotels') : t('restaurants')} in this category.
             </p>
             <button
               onClick={() => setCurrentIndex(0)}

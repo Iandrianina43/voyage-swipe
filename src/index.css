@@ -5,65 +5,54 @@
 
 @layer base {
   :root {
-    --background: 150 60% 98%;
-    --foreground: 160 50% 10%;
-
+    --background: 0 0% 100%;
+    --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
-    --card-foreground: 160 50% 10%;
-
+    --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
-    --popover-foreground: 160 50% 10%;
+    --popover-foreground: 20 14.3% 4.1%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 60 4.8% 95.9%;
+    --secondary-foreground: 24 9.8% 10%;
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
+    --accent: 60 4.8% 95.9%;
+    --accent-foreground: 24 9.8% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 20 14.3% 4.1%;
+    --radius: 0.75rem;
 
-    --primary: 153 100% 33%; /* TripAdvisor green */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 155 75% 54%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 150 10% 92%;
-    --muted-foreground: 150 30% 35%;
-
-    --accent: 0 80% 68%; /* Red accent for hearts/likes */
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 150 20% 88%;
-    --input: 150 20% 88%;
-    --ring: 153 100% 33%;
-
-    --radius: 1rem;
+    /* Custom TripAdvisor-like colors */
+    --tripadvisor-primary: 79 85% 35%;  /* Green */
+    --tripadvisor-secondary: 33 100% 51%;  /* Orange */
+    --tripadvisor-accent: 187 100% 42%;  /* Cyan */
+    --tripadvisor-light: 79 85% 95%;  /* Light Green */
   }
 
   .dark {
-    --background: 160 60% 6%;
-    --foreground: 150 20% 95%;
-
-    --card: 160 50% 8%;
-    --card-foreground: 150 20% 95%;
-
-    --popover: 160 50% 8%;
-    --popover-foreground: 150 20% 95%;
-
-    --primary: 153 100% 33%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 155 75% 30%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 160 50% 15%;
-    --muted-foreground: 150 20% 70%;
-
-    --accent: 0 80% 68%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 70% 45%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 160 50% 15%;
-    --input: 160 50% 15%;
-    --ring: 153 100% 33%;
+    --background: 20 14.3% 4.1%;
+    --foreground: 60 9.1% 97.8%;
+    --card: 20 14.3% 4.1%;
+    --card-foreground: 60 9.1% 97.8%;
+    --popover: 20 14.3% 4.1%;
+    --popover-foreground: 60 9.1% 97.8%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 12 6.5% 15.1%;
+    --secondary-foreground: 60 9.1% 97.8%;
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 60 9.1% 97.8%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 12 6.5% 15.1%;
+    --input: 12 6.5% 15.1%;
+    --ring: 35.5 91.7% 32.9%;
   }
 }
 
@@ -71,84 +60,62 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-@layer components {
-  .swipe-card {
-    @apply touch-none cursor-grab active:cursor-grabbing;
-  }
-  
-  .swipe-card.swiping {
-    @apply transition-transform duration-300 ease-out;
-  }
+/* Mobile container styles */
+.mobile-container {
+  @apply min-h-screen flex flex-col;
+}
 
-  /* Mobile app styling */
+.mobile-header {
+  @apply flex items-center px-4 py-3 border-b;
+}
+
+/* Animation classes for card swipe */
+.swipe-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.swipe-card.swiping {
+  transition: transform 0s;
+}
+
+.animate-card-swipe-right {
+  animation: swipeRight 0.3s forwards;
+}
+
+.animate-card-swipe-left {
+  animation: swipeLeft 0.3s forwards;
+}
+
+@keyframes swipeRight {
+  to {
+    transform: translateX(150%) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+@keyframes swipeLeft {
+  to {
+    transform: translateX(-150%) rotate(-30deg);
+    opacity: 0;
+  }
+}
+
+/* Media query for desktop */
+@media (min-width: 768px) {
   .mobile-container {
-    @apply mx-auto min-h-screen relative pb-16 overflow-hidden;
-    /* Mobile width */
-    @apply max-w-md md:max-w-none md:pl-64 md:pb-0;
-  }
-
-  .mobile-header {
-    @apply sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border px-4 py-3 flex items-center;
-    /* Web styling */
-    @apply md:pl-6;
-  }
-
-  .mobile-page {
-    @apply pt-16 pb-20 min-h-screen;
-    /* Web styling */
-    @apply md:pt-6 md:pb-6;
-  }
-
-  .mobile-card {
-    @apply rounded-xl border shadow-sm hover:shadow-md transition-shadow;
-  }
-
-  .mobile-nav {
-    @apply fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-t border-border flex justify-around items-center p-2;
-    /* Hide on desktop */
-    @apply md:hidden;
-  }
-
-  .nav-item {
-    @apply flex flex-col items-center justify-center py-1 px-3 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors;
-  }
-
-  .nav-item.active {
-    @apply text-primary;
-  }
-
-  /* Rating stars */
-  .stars-container {
-    @apply flex items-center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
   }
   
-  .star-filled {
-    @apply text-tripadvisor-yellow fill-tripadvisor-yellow;
-  }
-  
-  .star-empty {
-    @apply text-muted-foreground/30;
-  }
-
-  /* Web layout styles */
-  .web-container {
-    @apply hidden md:block md:pl-64;
-  }
-
-  .web-content {
-    @apply max-w-4xl mx-auto p-6;
-  }
-
-  /* Responsive card grids */
-  .card-grid {
-    @apply grid gap-4;
-    @apply md:grid-cols-2 lg:grid-cols-3;
+  .swipe-card {
+    max-width: 500px;
+    margin: 0 auto;
   }
 }
-
