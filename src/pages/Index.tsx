@@ -40,7 +40,7 @@ const Index = () => {
         
         toast({
           title: t('place.saved'),
-          description: `${place.name} ${t('place.saved.description')}`,
+          description: t('place.saved.description', { name: place.name }),
         });
       } catch (error: any) {
         console.error("Error saving place:", error);
@@ -100,38 +100,25 @@ const Index = () => {
           </div>
         </div>
       ) : (
-        // Mobile layout
+        // Mobile layout with padding to account for fixed header and footer
         <>
-          <div className="mobile-header justify-center">
-            <h1 className="text-xl font-bold text-tripadvisor-primary">{t('app.name')}</h1>
-            
-            {!user && (
-              <div className="absolute right-4">
-                <Button asChild size="sm" variant="ghost">
-                  <Link to="/auth" className="flex items-center gap-1">
-                    <LogIn size={16} />
-                    <span className="hidden sm:inline">{t('login')}</span>
-                  </Link>
-                </Button>
-              </div>
-            )}
-          </div>
-          
-          <div className="px-4 py-4">
-            <h2 className="text-lg font-semibold mb-2 text-center">{t('discover')}</h2>
-            <p className="text-center text-muted-foreground text-sm mb-6">
-              {t('discover.subtitle')}
-            </p>
-            
-            <CategorySelector 
-              activeCategory={activeCategory}
-              onCategoryChange={setActiveCategory}
-            />
-            
-            <SwipeContainer 
-              places={filteredPlaces} 
-              onSwipeRight={handleSwipeRight}
-            />
+          <div className="pt-16 pb-16">
+            <div className="px-4 py-4">
+              <h2 className="text-lg font-semibold mb-2 text-center">{t('discover')}</h2>
+              <p className="text-center text-muted-foreground text-sm mb-6">
+                {t('discover.subtitle')}
+              </p>
+              
+              <CategorySelector 
+                activeCategory={activeCategory}
+                onCategoryChange={setActiveCategory}
+              />
+              
+              <SwipeContainer 
+                places={filteredPlaces} 
+                onSwipeRight={handleSwipeRight}
+              />
+            </div>
           </div>
           
           <NavBar />

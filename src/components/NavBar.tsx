@@ -1,15 +1,21 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, MapPin, Heart, Home, Calendar, User } from 'lucide-react';
+import { Search, MapPin, Heart, Home, Calendar, User, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
 
 const NavBar = () => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const isMobile = useIsMobile();
 
   // Desktop sidebar navigation
@@ -29,6 +35,10 @@ const NavBar = () => {
         <NavLink path="/trip-planner" icon={<Calendar size={20} />} label={t('trips')} />
         <NavLink path="/profile" icon={<User size={20} />} label={t('profile')} />
       </nav>
+      
+      <div className="absolute bottom-8 left-0 right-0 px-6">
+        <LanguageSelector />
+      </div>
     </div>
   );
 
@@ -43,6 +53,7 @@ const NavBar = () => {
               {t('app.name')}
             </h1>
           </Link>
+          <LanguageSelector className="absolute right-12" />
           <Link to="/profile" className="absolute right-4">
             <Button variant="ghost" size="icon" className="rounded-full">
               <User size={20} />
@@ -52,33 +63,36 @@ const NavBar = () => {
       </header>
       
       {/* Bottom navigation */}
-      <nav className="mobile-nav max-w-md mx-auto">
-        <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
-          <Home size={20} />
-          <span className="text-xs mt-1">{t('home')}</span>
-        </Link>
-        
-        <Link to="/search" className={`nav-item ${isActive('/search') ? 'active' : ''}`}>
-          <Search size={20} />
-          <span className="text-xs mt-1">{t('search')}</span>
-        </Link>
-        
-        <Link to="/explore" className={`nav-item ${isActive('/explore') ? 'active' : ''}`}>
-          <MapPin size={20} />
-          <span className="text-xs mt-1">{t('explore')}</span>
-        </Link>
-        
-        <Link to="/saved" className={`nav-item ${isActive('/saved') ? 'active' : ''}`}>
-          <Heart size={20} />
-          <span className="text-xs mt-1">{t('saved.places')}</span>
-        </Link>
-        
-        <Link to="/trip-planner" className={`nav-item ${isActive('/trip-planner') ? 'active' : ''}`}>
-          <Calendar size={20} />
-          <span className="text-xs mt-1">{t('trips')}</span>
-        </Link>
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t flex items-center justify-around p-2 max-w-md mx-auto">
+        <NavItem to="/" icon={<Home size={20} />} label={t('home')} isActive={isActive('/')} />
+        <NavItem to="/search" icon={<Search size={20} />} label={t('search')} isActive={isActive('/search')} />
+        <NavItem to="/explore" icon={<MapPin size={20} />} label={t('explore')} isActive={isActive('/explore')} />
+        <NavItem to="/saved" icon={<Heart size={20} />} label={t('saved.places')} isActive={isActive('/saved')} />
+        <NavItem to="/trip-planner" icon={<Calendar size={20} />} label={t('trips')} isActive={isActive('/trip-planner')} />
       </nav>
     </>
+  );
+
+  // Language selector component
+  const LanguageSelector = ({ className = "" }: { className?: string }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className={`rounded-full ${className}`}>
+          <Globe size={20} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="bg-white">
+        <DropdownMenuItem onClick={() => setLanguage('fr')} className={language === 'fr' ? 'bg-muted font-medium' : ''}>
+          {t('french')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage('en')} className={language === 'en' ? 'bg-muted font-medium' : ''}>
+          {t('english')}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage('mg')} className={language === 'mg' ? 'bg-muted font-medium' : ''}>
+          {t('malagasy')}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 
   // Reusable NavLink component for desktop sidebar
@@ -93,6 +107,18 @@ const NavBar = () => {
     >
       <span className="mr-3">{icon}</span>
       {label}
+    </Link>
+  );
+  
+  // Mobile navigation item
+  const NavItem = ({ to, icon, label, isActive }: { to: string; icon: React.ReactNode; label: string; isActive: boolean }) => (
+    <Link to={to} className="flex flex-col items-center justify-center w-1/5 py-1">
+      <div className={`p-1.5 rounded-full ${isActive ? 'bg-tripadvisor-light text-tripadvisor-primary' : 'text-gray-500'}`}>
+        {icon}
+      </div>
+      <span className={`text-xs mt-1 ${isActive ? 'text-tripadvisor-primary font-medium' : 'text-gray-500'}`}>
+        {label}
+      </span>
     </Link>
   );
 

@@ -5,6 +5,8 @@ import { Place } from '@/data/places';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 
 interface SwipeContainerProps {
   places: Place[];
@@ -35,8 +37,8 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
       }
       
       toast({
-        title: 'Place Saved',
-        description: `${currentPlace.name} has been saved to your favorites.`,
+        title: t('place.saved'),
+        description: t('place.saved.description', { name: currentPlace.name }),
       });
     }
     
@@ -47,9 +49,8 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
     }, 300);
   };
   
-  const getAnimationClass = () => {
-    if (!direction) return '';
-    return direction === 'right' ? 'animate-card-swipe-right' : 'animate-card-swipe-left';
+  const resetCards = () => {
+    setCurrentIndex(0);
   };
   
   return (
@@ -57,9 +58,7 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
       {currentIndex < places.length ? (
         <>
           {/* Current card */}
-          <div
-            className={`absolute inset-0 ${getAnimationClass()}`}
-          >
+          <div className="absolute inset-0">
             <SwipeCard
               place={currentPlace}
               onSwipe={(direction) => handleSwipe(direction)}
@@ -82,17 +81,18 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
         <div className="h-full flex items-center justify-center">
           <div className="text-center p-6 max-w-xs mx-auto">
             <p className="text-lg font-medium mb-3 text-tripadvisor-primary">
-              No more places to show!
+              {t('no.more.places')}
             </p>
             <p className="text-muted-foreground mb-4">
-              You've seen all {places.length > 0 && places[0].type === 'hotel' ? t('hotels') : t('restaurants')} in this category.
+              {t('seen.all.places', { type: places.length > 0 && places[0].type === 'hotel' ? t('hotels') : t('restaurants') })}
             </p>
-            <button
-              onClick={() => setCurrentIndex(0)}
-              className="bg-tripadvisor-primary hover:bg-tripadvisor-primary/90 text-white px-4 py-2 rounded-full"
+            <Button
+              onClick={resetCards}
+              className="flex items-center gap-2 bg-tripadvisor-primary hover:bg-tripadvisor-primary/90 text-white px-4 py-2 rounded-full"
             >
-              Start Over
-            </button>
+              <RotateCcw size={16} />
+              {t('start.over')}
+            </Button>
           </div>
         </div>
       )}

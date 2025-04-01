@@ -5,6 +5,7 @@ import { Place } from '@/data/places';
 import { cn } from '@/lib/utils';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface SwipeCardProps {
   place: Place;
@@ -19,6 +20,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
   const currentX = useRef(0);
   const isDragging = useRef(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   const handleSwipe = (direction: 'left' | 'right') => {
     setSwipeAnimation(direction);
@@ -96,7 +98,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
         "text-sm",
         index < price ? "text-foreground" : "text-muted-foreground opacity-40"
       )}>
-        $
+        €
       </span>
     ));
   };
@@ -142,7 +144,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
           <Button 
             variant="outline" 
             size="icon" 
-            className="bg-white text-red-500 hover:bg-red-50 hover:text-red-600 rounded-full h-12 w-12 shadow-lg pointer-events-auto"
+            className="bg-white/90 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-full h-12 w-12 shadow-lg pointer-events-auto"
             onClick={(e) => {
               e.stopPropagation();
               handleSwipe('left');
@@ -154,7 +156,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
           <Button 
             variant="outline" 
             size="icon" 
-            className="bg-white text-green-500 hover:bg-green-50 hover:text-green-600 rounded-full h-12 w-12 shadow-lg pointer-events-auto"
+            className="bg-white/90 text-green-500 hover:bg-green-50 hover:text-green-600 rounded-full h-12 w-12 shadow-lg pointer-events-auto"
             onClick={(e) => {
               e.stopPropagation();
               handleSwipe('right');

@@ -34,7 +34,7 @@ const AuthPage = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-2xl md:text-3xl font-bold text-tripadvisor-primary mb-2">
-            Mi Voyage
+            {t('app.name')}
           </h1>
           <p className="text-muted-foreground">
             {t('discover.subtitle')}
@@ -54,16 +54,16 @@ const AuthPage = () => {
               <path fill="#4A90E2" d="M19.834192,20.9995801 C22.0291676,18.9520994 23.4545455,15.903663 23.4545455,12 C23.4545455,11.2909091 23.3454545,10.5818182 23.1272727,9.90909091 L12,9.90909091 L12,14.4545455 L18.4363636,14.4545455 C18.1187732,16.013626 17.2662994,17.2212117 16.0407269,18.0125889 L19.834192,20.9995801 Z" />
               <path fill="#FBBC05" d="M5.27698177,14.2678769 C5.03832634,13.556323 4.90909091,12.7937589 4.90909091,12 C4.90909091,11.2182781 5.03443647,10.4668121 5.26620003,9.76452941 L1.23999023,6.65002441 C0.43658717,8.26043162 0,10.0753848 0,12 C0,13.9195484 0.444780743,15.7301709 1.23746264,17.3349879 L5.27698177,14.2678769 Z" />
             </svg>
-            Sign in with Google
+            {t('login')}
           </Button>
         </div>
         
         <p className="text-sm text-center text-muted-foreground">
-          By signing in, you agree to our Terms of Service and Privacy Policy.
+          {t('terms.agreement')}
         </p>
       </div>
     </div>
   );
-};
+}
 
 export default AuthPage;

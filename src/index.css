@@ -106,6 +106,32 @@
   }
 }
 
+/* Mobile bottom navigation */
+.mobile-nav {
+  @apply fixed bottom-0 left-0 right-0 z-40 bg-white border-t flex items-center justify-around p-2;
+}
+
+.nav-item {
+  @apply flex flex-col items-center justify-center w-1/5 py-1;
+}
+
+.nav-item.active {
+  @apply text-tripadvisor-primary;
+}
+
+.nav-item:not(.active) {
+  @apply text-gray-500;
+}
+
+/* Card design improvements */
+.card-gradient {
+  @apply bg-gradient-to-br from-white to-gray-50;
+}
+
+.glass-card {
+  @apply bg-white/80 backdrop-blur-sm shadow-md;
+}
+
 /* Media query for desktop */
 @media (min-width: 768px) {
   .mobile-container {
@@ -117,5 +143,15 @@
   .swipe-card {
     max-width: 500px;
     margin: 0 auto;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Desktop specific design improvements */
+  body {
+    @apply bg-gray-50;
+  }
+  
+  .desktop-card {
+    @apply rounded-xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl;
   }
 }

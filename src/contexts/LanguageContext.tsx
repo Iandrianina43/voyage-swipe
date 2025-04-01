@@ -8,7 +8,7 @@ type Language = 'en' | 'fr' | 'mg';
 type LanguageContextType = {
   language: Language;
   setLanguage: (lang: Language) => Promise<void>;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string>) => string;
 };
 
 // Simple translations for core functionality
@@ -37,6 +37,11 @@ const translations: Record<Language, Record<string, string>> = {
     'english': 'English',
     'french': 'French',
     'malagasy': 'Malagasy',
+    'place.saved': 'Place Saved',
+    'place.saved.description': '{name} has been saved to your favorites.',
+    'no.more.places': 'No more places to show!',
+    'seen.all.places': 'You\'ve seen all {type} in this category.',
+    'start.over': 'Start Over',
   },
   fr: {
     'app.name': 'Mi Voyage',
@@ -62,6 +67,11 @@ const translations: Record<Language, Record<string, string>> = {
     'english': 'Anglais',
     'french': 'Français',
     'malagasy': 'Malgache',
+    'place.saved': 'Lieu Enregistré',
+    'place.saved.description': '{name} a été ajouté à vos favoris.',
+    'no.more.places': 'Plus de lieux à afficher !',
+    'seen.all.places': 'Vous avez vu tous les {type} dans cette catégorie.',
+    'start.over': 'Recommencer',
   },
   mg: {
     'app.name': 'Mi Voyage',
@@ -87,6 +97,11 @@ const translations: Record<Language, Record<string, string>> = {
     'english': 'Anglisy',
     'french': 'Frantsay',
     'malagasy': 'Malagasy',
+    'place.saved': 'Toerana Voatahiry',
+    'place.saved.description': 'Ny {name} dia voatahiry ao anatin\'ny safidimao.',
+    'no.more.places': 'Tsy misy toerana hafa haseho!',
+    'seen.all.places': 'Efa nahita ny {type} rehetra ao anatin\'ity sokajy ity ianao.',
+    'start.over': 'Atombohy Indray',
   }
 };
 
@@ -94,7 +109,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  const [language, setLanguageState] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>('fr'); // Set French as default
 
   useEffect(() => {
     // Get user's language preference from local storage first
@@ -133,8 +148,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const t = (key: string) => {
-    return translations[language][key] || key;
+  const t = (key: string, params?: Record<string, string>) => {
+    let text = translations[language][key] || key;
+    
+    // Replace parameters in the text if provided
+    if (params) {
+      Object.entries(params).forEach(([param, value]) => {
+        text = text.replace(`{${param}}`, value);
+      });
+    }
+    
+    return text;
   };
 
   return (
