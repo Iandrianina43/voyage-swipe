@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Hotel, Utensils } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CategorySelectorProps {
   activeCategory: 'hotel' | 'restaurant';
@@ -13,6 +14,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   activeCategory, 
   onCategoryChange 
 }) => {
+  const { t } = useLanguage();
+  
   return (
     <div className="flex justify-center space-x-2 my-4">
       <Button
@@ -20,13 +23,13 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         className={cn(
           "flex items-center space-x-2 rounded-full px-5 py-2 transition-all",
           activeCategory === 'hotel' ? 
-            "bg-voyage-primary text-white" : 
+            "bg-tripadvisor-primary text-white" : 
             "text-muted-foreground hover:bg-muted"
         )}
         onClick={() => onCategoryChange('hotel')}
       >
         <Hotel size={20} />
-        <span>Hotels</span>
+        <span>{t('hotels')}</span>
       </Button>
       
       <Button
@@ -34,13 +37,13 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         className={cn(
           "flex items-center space-x-2 rounded-full px-5 py-2 transition-all",
           activeCategory === 'restaurant' ? 
-            "bg-voyage-accent text-white" : 
+            "bg-tripadvisor-accent text-white" : 
             "text-muted-foreground hover:bg-muted"
         )}
         onClick={() => onCategoryChange('restaurant')}
       >
         <Utensils size={20} />
-        <span>Restaurants</span>
+        <span>{t('restaurants')}</span>
       </Button>
     </div>
   );

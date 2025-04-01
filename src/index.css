@@ -88,15 +88,21 @@
 
   /* Mobile app styling */
   .mobile-container {
-    @apply max-w-md mx-auto min-h-screen relative pb-16 overflow-hidden;
+    @apply mx-auto min-h-screen relative pb-16 overflow-hidden;
+    /* Mobile width */
+    @apply max-w-md md:max-w-none md:pl-64 md:pb-0;
   }
 
   .mobile-header {
     @apply sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border px-4 py-3 flex items-center;
+    /* Web styling */
+    @apply md:pl-6;
   }
 
   .mobile-page {
     @apply pt-16 pb-20 min-h-screen;
+    /* Web styling */
+    @apply md:pt-6 md:pb-6;
   }
 
   .mobile-card {
@@ -105,6 +111,8 @@
 
   .mobile-nav {
     @apply fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-t border-border flex justify-around items-center p-2;
+    /* Hide on desktop */
+    @apply md:hidden;
   }
 
   .nav-item {
@@ -127,4 +135,20 @@
   .star-empty {
     @apply text-muted-foreground/30;
   }
+
+  /* Web layout styles */
+  .web-container {
+    @apply hidden md:block md:pl-64;
+  }
+
+  .web-content {
+    @apply max-w-4xl mx-auto p-6;
+  }
+
+  /* Responsive card grids */
+  .card-grid {
+    @apply grid gap-4;
+    @apply md:grid-cols-2 lg:grid-cols-3;
+  }
 }
+

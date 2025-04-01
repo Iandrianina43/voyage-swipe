@@ -9,7 +9,161 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          id: string
+          language: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          id: string
+          language?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      recommended_places: {
+        Row: {
+          id: string
+          place_id: string
+          recommended_at: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          place_id: string
+          recommended_at?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          place_id?: string
+          recommended_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      saved_places: {
+        Row: {
+          id: string
+          place_id: string
+          saved_at: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          place_id: string
+          saved_at?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          place_id?: string
+          saved_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      search_history: {
+        Row: {
+          id: string
+          query: string
+          searched_at: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          query: string
+          searched_at?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          query?: string
+          searched_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trip_places: {
+        Row: {
+          added_at: string | null
+          id: string
+          notes: string | null
+          order_index: number
+          place_id: string
+          trip_id: string
+        }
+        Insert: {
+          added_at?: string | null
+          id?: string
+          notes?: string | null
+          order_index: number
+          place_id: string
+          trip_id: string
+        }
+        Update: {
+          added_at?: string | null
+          id?: string
+          notes?: string | null
+          order_index?: number
+          place_id?: string
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_places_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trips: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          name: string
+          start_date: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          name: string
+          start_date?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          name?: string
+          start_date?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

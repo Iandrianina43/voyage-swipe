@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, MapPin, Hotel, Utensils, Star, ArrowLeft } from 'lucide-react';
@@ -7,20 +7,64 @@ import { dummyPlaces, Place } from '@/data/places';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import NavBar from '@/components/NavBar';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<Place[]>([]);
-  const [recentSearches, setRecentSearches] = useState<string[]>(['Beach resort', 'Italian restaurant', 'New York hotel']);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const { user } = useAuth();
+  const { t } = useLanguage();
   
-  const handleSearch = (e: React.FormEvent) => {
+  // Fetch recent searches from Supabase when component mounts
+  useEffect(() => {
+    const fetchRecentSearches = async () => {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('search_history')
+          .select('query')
+          .eq('user_id', user.id)
+          .order('searched_at', { ascending: false })
+          .limit(5);
+        
+        if (error) throw error;
+        
+        if (data) {
+          const searches = data.map(item => item.query);
+          setRecentSearches(searches);
+        }
+      } catch (error) {
+        console.error("Error fetching recent searches:", error);
+      }
+    };
+    
+    fetchRecentSearches();
+  }, [user]);
+  
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!searchTerm.trim()) return;
     
-    // Add to recent searches
-    if (!recentSearches.includes(searchTerm)) {
-      setRecentSearches(prev => [searchTerm, ...prev].slice(0, 5));
+    // Save search to history if user is logged in
+    if (user) {
+      try {
+        await supabase.from('search_history').insert({
+          user_id: user.id,
+          query: searchTerm
+        });
+        
+        // Update local state to include new search
+        if (!recentSearches.includes(searchTerm)) {
+          setRecentSearches(prev => [searchTerm, ...prev].slice(0, 5));
+        }
+      } catch (error) {
+        console.error("Error saving search:", error);
+      }
     }
     
     // Filter places based on search term
@@ -36,8 +80,20 @@ const SearchPage = () => {
     setResults(filteredResults);
   };
   
-  const searchFor = (term: string) => {
+  const searchFor = async (term: string) => {
     setSearchTerm(term);
+    
+    // Save search to history if user is logged in
+    if (user) {
+      try {
+        await supabase.from('search_history').insert({
+          user_id: user.id,
+          query: term
+        });
+      } catch (error) {
+        console.error("Error saving search:", error);
+      }
+    }
     
     // Trigger search programmatically
     const filteredResults = dummyPlaces.filter(place => 
@@ -73,7 +129,7 @@ const SearchPage = () => {
         <Link to="/" className="mr-2">
           <ArrowLeft size={20} className="text-tripadvisor-primary" />
         </Link>
-        <h1 className="text-lg font-semibold">Search</h1>
+        <h1 className="text-lg font-semibold">{t('search')}</h1>
       </div>
       
       <div className="px-4 py-4">
@@ -81,7 +137,7 @@ const SearchPage = () => {
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search for hotels, restaurants, locations..."
+            placeholder={t('search.placeholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 pr-4 py-5 w-full rounded-full border-muted"
@@ -91,14 +147,14 @@ const SearchPage = () => {
             size="sm" 
             className="absolute right-1 top-1 rounded-full bg-tripadvisor-primary hover:bg-tripadvisor-primary/90 text-white"
           >
-            Search
+            {t('search')}
           </Button>
         </form>
         
         {results.length > 0 ? (
           <div>
             <h2 className="text-lg font-semibold mb-3">Search Results</h2>
-            <div className="grid gap-3">
+            <div className="grid gap-3 md:grid-cols-2">
               {results.map(place => (
                 <Link to={`/place/${place.id}`} key={place.id}>
                   <Card className="mobile-card hover:shadow-md transition-shadow">
@@ -144,7 +200,7 @@ const SearchPage = () => {
           </div>
         ) : (
           <div>
-            <h2 className="text-base font-semibold mb-3">Recent Searches</h2>
+            <h2 className="text-base font-semibold mb-3">{t('recent.searches')}</h2>
             <div className="flex flex-wrap gap-2 mb-6">
               {recentSearches.map((term, index) => (
                 <Button 
@@ -158,7 +214,7 @@ const SearchPage = () => {
               ))}
             </div>
             
-            <h2 className="text-base font-semibold mt-6 mb-3">Popular Categories</h2>
+            <h2 className="text-base font-semibold mt-6 mb-3">{t('popular.categories')}</h2>
             <div className="grid grid-cols-2 gap-3">
               <Button 
                 variant="outline" 

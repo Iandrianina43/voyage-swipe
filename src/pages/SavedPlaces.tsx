@@ -1,35 +1,90 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { dummyPlaces, Place } from '@/data/places';
 import { Heart, Star, Hotel, Utensils, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import NavBar from '@/components/NavBar';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SavedPlaces = () => {
   const [savedPlaces, setSavedPlaces] = useState<Place[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { t } = useLanguage();
+  const navigate = useNavigate();
   
-  // For demo purposes, we're showing a few random places as saved
   useEffect(() => {
-    // In a real app, this would come from localStorage or a database
-    const randomSavedPlaces = dummyPlaces
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 3);
-    
-    setSavedPlaces(randomSavedPlaces);
-  }, []);
+    const fetchSavedPlaces = async () => {
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        // Get saved place IDs from Supabase
+        const { data: savedData, error } = await supabase
+          .from('saved_places')
+          .select('place_id')
+          .eq('user_id', user.id);
+        
+        if (error) throw error;
+        
+        if (savedData && savedData.length > 0) {
+          // Get the actual place objects from dummy data using the saved IDs
+          const placeIds = savedData.map(item => item.place_id);
+          const places = dummyPlaces.filter(place => placeIds.includes(place.id));
+          setSavedPlaces(places);
+        } else {
+          setSavedPlaces([]);
+        }
+      } catch (error) {
+        console.error("Error fetching saved places:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load saved places",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSavedPlaces();
+  }, [user, toast]);
   
-  const handleRemove = (id: string) => {
-    setSavedPlaces(prev => prev.filter(place => place.id !== id));
+  const handleRemove = async (id: string) => {
+    if (!user) return;
     
-    toast({
-      title: "Removed from favorites",
-      description: "The place has been removed from your favorites.",
-      duration: 2000,
-    });
+    try {
+      const { error } = await supabase
+        .from('saved_places')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('place_id', id);
+      
+      if (error) throw error;
+      
+      setSavedPlaces(prev => prev.filter(place => place.id !== id));
+      
+      toast({
+        title: "Removed from favorites",
+        description: "The place has been removed from your favorites.",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error("Error removing place:", error);
+      toast({
+        title: "Error",
+        description: "Failed to remove place",
+        variant: "destructive",
+      });
+    }
   };
   
   const renderStars = (rating: number) => {
@@ -46,6 +101,34 @@ const SavedPlaces = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    // If the user is not logged in, redirect to auth page
+    if (!user && !isLoading) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to view your saved places",
+      });
+      navigate('/auth');
+    }
+  }, [user, isLoading, navigate, toast]);
+  
+  if (isLoading) {
+    return (
+      <div className="mobile-container">
+        <div className="mobile-header">
+          <Link to="/" className="mr-2">
+            <ArrowLeft size={20} className="text-tripadvisor-primary" />
+          </Link>
+          <h1 className="text-lg font-semibold">{t('saved.places')}</h1>
+        </div>
+        <div className="flex items-center justify-center h-[70vh]">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-tripadvisor-primary"></div>
+        </div>
+        <NavBar />
+      </div>
+    );
+  }
   
   return (
     <div className="mobile-container">
@@ -53,7 +136,7 @@ const SavedPlaces = () => {
         <Link to="/" className="mr-2">
           <ArrowLeft size={20} className="text-tripadvisor-primary" />
         </Link>
-        <h1 className="text-lg font-semibold">Your Saved Places</h1>
+        <h1 className="text-lg font-semibold">{t('saved.places')}</h1>
       </div>
       
       <div className="px-4 py-4">
@@ -62,16 +145,16 @@ const SavedPlaces = () => {
             <div className="w-16 h-16 rounded-full bg-tripadvisor-light flex items-center justify-center mb-4">
               <Heart className="w-8 h-8 text-tripadvisor-primary" />
             </div>
-            <h2 className="text-lg font-medium mb-2">No saved places yet</h2>
+            <h2 className="text-lg font-medium mb-2">{t('no.saved.places')}</h2>
             <p className="text-muted-foreground mb-4 max-w-xs">
-              Swipe right on places you love to save them here.
+              {t('swipe.right.save')}
             </p>
             <Button asChild className="bg-tripadvisor-primary hover:bg-tripadvisor-primary/90">
-              <Link to="/">Discover Places</Link>
+              <Link to="/">{t('discover.places')}</Link>
             </Button>
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             {savedPlaces.map(place => (
               <Card key={place.id} className="mobile-card overflow-hidden border-border">
                 <div className="flex h-32">
