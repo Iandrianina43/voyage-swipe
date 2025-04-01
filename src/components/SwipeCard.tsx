@@ -1,11 +1,12 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Heart, X, Star } from 'lucide-react';
 import { Place } from '@/data/places';
 import { cn } from '@/lib/utils';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SwipeCardProps {
   place: Place;
@@ -21,10 +22,14 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
   const isDragging = useRef(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   
   const handleSwipe = (direction: 'left' | 'right') => {
+    if (!isTop) return;
     setSwipeAnimation(direction);
-    onSwipe(direction);
+    setTimeout(() => {
+      onSwipe(direction);
+    }, 50);
   };
 
   const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
@@ -39,12 +44,13 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
       : e.clientX;
     
     if (cardRef.current) {
+      cardRef.current.style.transition = 'none';
       cardRef.current.classList.add('swiping');
     }
   };
 
   const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
-    if (!isTop || !isDragging.current) return;
+    if (!isTop || !isDragging.current || !cardRef.current) return;
     
     const clientX = 'touches' in e 
       ? e.touches[0].clientX 
@@ -73,6 +79,8 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
     cardRef.current.classList.remove('swiping');
     
     if (isDragging.current) {
+      cardRef.current.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+      
       if (currentX.current > 100) {
         handleSwipe('right');
       } else if (currentX.current < -100) {
@@ -86,8 +94,32 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
     isDragging.current = false;
   };
   
-  const handleCardClick = () => {
-    if (!swipeAnimation && !isDragging.current) {
+  // Add listeners for mouse events outside the component
+  useEffect(() => {
+    if (!isTop) return;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      handleTouchMove(e as unknown as React.MouseEvent);
+    };
+    
+    const handleMouseUp = () => {
+      handleTouchEnd();
+    };
+    
+    if (isTop) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isTop]);
+  
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Only navigate if it wasn't a drag attempt and not during animation
+    if (!swipeAnimation && Math.abs(currentX.current) < 5 && !isDragging.current) {
       navigate(`/place/${place.id}`);
     }
   };
@@ -107,19 +139,16 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
     <div 
       ref={cardRef}
       className={cn(
-        "swipe-card absolute w-full rounded-2xl overflow-hidden shadow-lg bg-card",
+        "swipe-card w-full rounded-2xl overflow-hidden shadow-lg bg-card",
         isTop ? "z-10" : "z-0",
         swipeAnimation === 'right' && "animate-card-swipe-right",
         swipeAnimation === 'left' && "animate-card-swipe-left"
       )}
-      onClick={handleCardClick}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove as any}
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleTouchStart}
-      onMouseMove={handleTouchMove as any}
-      onMouseUp={handleTouchEnd}
-      onMouseLeave={handleTouchEnd}
+      onClick={handleCardClick}
     >
       <div className="relative w-full aspect-[3/4]">
         <img 
@@ -139,7 +168,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
           <p className="text-sm opacity-75">{place.distance}</p>
         </div>
 
-        {/* Left/Right buttons for desktop */}
+        {/* Like/Dislike buttons */}
         <div className="absolute inset-0 flex items-center justify-between px-4 pointer-events-none">
           <Button 
             variant="outline" 

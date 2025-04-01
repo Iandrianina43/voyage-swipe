@@ -32,7 +32,7 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
     setDirection(dir);
     setIsSwiping(true);
     
-    if (dir === 'right') {
+    if (dir === 'right' && currentPlace) {
       // Like action
       if (user && onSwipeRight) {
         onSwipeRight(currentPlace);
@@ -60,13 +60,15 @@ const SwipeContainer: React.FC<SwipeContainerProps> = ({ places, onSwipeRight })
       {currentIndex < places.length ? (
         <>
           {/* Current card */}
-          <div className="absolute inset-0">
-            <SwipeCard
-              place={currentPlace}
-              onSwipe={(direction) => handleSwipe(direction)}
-              isTop={true}
-            />
-          </div>
+          {currentPlace && (
+            <div className="absolute inset-0">
+              <SwipeCard
+                place={currentPlace}
+                onSwipe={handleSwipe}
+                isTop={true}
+              />
+            </div>
+          )}
           
           {/* Next card (for peeking) */}
           {nextPlace && (
