@@ -17,6 +17,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const startX = useRef(0);
   const currentX = useRef(0);
+  const isDragging = useRef(false);
   const navigate = useNavigate();
   
   const handleSwipe = (direction: 'left' | 'right') => {
@@ -27,6 +28,10 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
   const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
     if (!isTop) return;
     
+    // For mouse events, only start dragging on mouse down
+    if ('button' in e && e.button !== 0) return; // Only left mouse button
+    
+    isDragging.current = true;
     startX.current = 'touches' in e 
       ? e.touches[0].clientX 
       : e.clientX;
@@ -37,7 +42,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
   };
 
   const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
-    if (!isTop) return;
+    if (!isTop || !isDragging.current) return;
     
     const clientX = 'touches' in e 
       ? e.touches[0].clientX 
@@ -65,18 +70,22 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ place, onSwipe, isTop }) => {
     
     cardRef.current.classList.remove('swiping');
     
-    if (currentX.current > 100) {
-      handleSwipe('right');
-    } else if (currentX.current < -100) {
-      handleSwipe('left');
-    } else {
-      cardRef.current.style.transform = '';
-      cardRef.current.style.boxShadow = '';
+    if (isDragging.current) {
+      if (currentX.current > 100) {
+        handleSwipe('right');
+      } else if (currentX.current < -100) {
+        handleSwipe('left');
+      } else {
+        cardRef.current.style.transform = '';
+        cardRef.current.style.boxShadow = '';
+      }
     }
+    
+    isDragging.current = false;
   };
   
   const handleCardClick = () => {
-    if (!swipeAnimation) {
+    if (!swipeAnimation && !isDragging.current) {
       navigate(`/place/${place.id}`);
     }
   };
